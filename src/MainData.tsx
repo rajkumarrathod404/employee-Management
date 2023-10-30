@@ -1,5 +1,5 @@
 import * as React from "react";
-import { alpha } from "@mui/material/styles";
+import { alpha, makeStyles } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -25,13 +25,10 @@ import Button from "@mui/material/Button";
 
 export function ColorButtons() {
   return (
-    <Box sx={{marginRight:"10px"}}>
+    <Box sx={{ marginRight: 1 }}>
       {/* <Button color="secondary">Add</Button> */}
-      <Button sx={{marginRight:"10px"}} variant="outlined" color="error">
+      <Button variant="outlined" color="error">
         Delete
-      </Button>
-      <Button variant="contained" color="success">
-        Add
       </Button>
     </Box>
   );
@@ -43,7 +40,6 @@ interface Data {
   Salary: number;
   Addres: string;
   name: string;
-  action: boolean;
 }
 
 function createData(
@@ -51,8 +47,7 @@ function createData(
   name: string,
   ID: number,
   Addres: string,
-  Salary: number,
-  action: boolean
+  Salary: number
 ): Data {
   return {
     id,
@@ -60,24 +55,23 @@ function createData(
     ID,
     Addres,
     Salary,
-    action,
   };
 }
 // const [add, setAdd] = React.useState<boolean>(true);
 const rows = [
   createData(1, "Cupcake", 305, "PCMC", 4.5),
-  createData(2, "Donut", 452, 25.0, 51),
-  createData(3, "Eclair", 262, 16.0, 24),
-  createData(4, "Frozen yoghurt", 159, 6.0, 24),
-  createData(5, "Gingerbread", 356, 16.0, 49),
-  createData(6, "Honeycomb", 408, 3.2, 87),
-  createData(7, "Ice cream sandwich", 237, 9.0, 37),
-  createData(8, "Jelly Bean", 375, 0.0, 94),
-  createData(9, "KitKat", 518, 26.0, 65),
-  createData(10, "Lollipop", 392, 0.2, 98),
-  createData(11, "Marshmallow", 318, 0, 81),
-  createData(12, "Nougat", 360, 19.0, 9),
-  createData(13, "Oreo", 437, 18.0, 63),
+  createData(2, "Donut", 452, "0", 51),
+  createData(3, "Eclair", 262, "0", 24),
+  createData(4, "Frozen yoghurt", 159, " asd", 24),
+  createData(5, "Gingerbread", 356, "asd", 49),
+  createData(6, "Honeycomb", 408, "as", 87),
+  createData(7, "Ice cream sandwich", 237, "sdf", 37),
+  createData(8, "Jelly Bean", 375, "fdv", 94),
+  createData(9, "KitKat", 518, "errt", 65),
+  createData(10, "Lollipop", 392, "tr", 98),
+  createData(11, "Marshmallow", 6, "terd", 81),
+  createData(12, "Nougat", 360, "re", 9),
+  createData(13, "Oreo", 437, "54", 63),
 ];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -174,7 +168,16 @@ interface EnhancedTableProps {
   orderBy: string;
   rowCount: number;
 }
+const useStyles = makeStyles({
 
+  root: {
+      "& .MuiTableCell-head": {
+        
+          color: "white",
+          backgroundColor: "blue"
+      },
+  }
+});
 function EnhancedTableHead(props: EnhancedTableProps) {
   const {
     onSelectAllClick,
@@ -205,6 +208,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
+          sx={{}}
             key={headCell.id}
             align={headCell.numeric ? "right" : "left"}
             padding={headCell.disablePadding ? "none" : "normal"}
@@ -235,49 +239,58 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   const { numSelected } = props;
 
   return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(
-              theme.palette.primary.main,
-              theme.palette.action.activatedOpacity
-            ),
-        }),
-      }}>
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          color="inherit"
-          variant="subtitle1"
-          component="div">
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          variant="h6"
-          id="tableTitle"
-          component="div">
-          NP - System
-        </Typography>
-      )}
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-    </Toolbar>
+    <>
+      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Toolbar
+          sx={{
+            pl: { sm: 2 },
+            pr: { xs: 1, sm: 1 },
+            ...(numSelected > 0 && {
+              bgcolor: (theme) =>
+                alpha(
+                  theme.palette.primary.main,
+                  theme.palette.action.activatedOpacity
+                ),
+            }),
+          }}>
+          {numSelected > 0 ? (
+            <Typography
+              sx={{ flex: "1 1 100%" }}
+              color="inherit"
+              variant="subtitle1"
+              component="div">
+              {numSelected} selected
+            </Typography>
+          ) : (
+            <Typography
+              sx={{ flex: "1 1 100%" }}
+              variant="h6"
+              id="tableTitle"
+              component="div">
+              NP - System
+            </Typography>
+          )}
+        </Toolbar>
+        <Box sx={{ display: "flex", gap: "20px" }}>
+          {numSelected > 0 ? (
+            <Tooltip title="Delete">
+              <IconButton>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          ) : (
+            <Tooltip title="Filter list">
+              <IconButton>
+                <FilterListIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+          <Button sx={{height:"40px", marginTop:2, marginRight:2}} variant="contained" color="success">
+            Add
+          </Button>
+        </Box>
+      </Box>
+    </>
   );
 }
 export default function EnhancedTable() {
